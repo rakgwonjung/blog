@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Messages App</title>
+    <style>
+        [v-cloak] {display:none;}
+        body > div {width: 500px; margin:0 auto;}
+        textarea {width: 100%;}
+        ul {padding: 0 15px;}
+    </style>
+</head>
+<body>
+    <div id="app" v-cloak>
+        <textarea v-focus></textarea>
+        <message-list :items="messages" @delete="deleteMessage"></message-list>
+        <!--
+        <ul>
+            <li v-for="message in messages">
+                {{ message.text }} - {{ message.createAt }}
+                <button @click="deleteMessage(message)">X</button>
+            </li>
+        </ul>
+        -->
+        <form v-on:submit.prevent="addMessage">
+            <textarea v-model="newMessage" placeholder="Leave a message">
+            </textarea>
+            <div>
+                <button v-bind:disabled="addDisabled" type="submit">Add</button>
+            </div>
+        </form>
+    </div>
+    <script src="https://unpkg.com/vue@2.5.13/dist/vue.js"></script>
+    <script type="module">
+    import MessageList from './components/MessageList.js'
+    import './directives/focus.direcetive.js'
+    import './filters/datetime.filter.js'
+    // import lifecyleLogger from './mixins/lifecycle-logger.mixin.js'
+    import LifecycleLogger from './plugins/lifecycle-logger.plugins.js'
+    Vue.use(LifecycleLogger, {beforMount: false})
+    let vm = new Vue({
+        el: '#app',
+        name: 'MessageApp',
+        // mixins: [lifecycleLogger],
+        components: {
+            MessageList
+        },
+        /*
+        data: {
+            message: [],
+            newMessage: ''
+        }
+        */
+        data() {
+            return {
+                messages: [],
+                newMessage: ''
+            }
+        },
+        computed: {
+            addDisabled() {
+                return this.messages.length >= 10 || this.newMessage.length > 50
+            }
+        },
+        methods: {
+            // 화살표 함수를 사용하게 되면 this로 vue 인스턴스에 접근할 수 없다
+            addMessage(event) {
+                if (!this.newMessage) return
+                let now = new Date();
+                this.messages.push({
+                    id: now.getTime(),
+                    text: this.newMessage, createAt: now})
+                this.newMessage = ''
+            },
+            deleteMessage(message) {
+                this.messages.splice(this.messages.indexOf(message), 1)
+            }
+        }
+    })
+    </script>
+</body>
+</html>
