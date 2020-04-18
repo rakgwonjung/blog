@@ -17,14 +17,17 @@ public class MessageRepository {
 
     private DataSource dataSource;
 
+    // DataSource에서 데이터베이스 연결을 얻을 수 있도록 DataSource 인스턴스의 주입
     public MessageRepository(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
     public Message saveMessage(Message message) {
+        // 스프링의 헬퍼(helper) 클래스인 DataSourceUtils
         Connection c = DataSourceUtils.getConnection(dataSource);
         try {
             String insertSql = "INSERT INTO messages ('id', 'text', 'created_date') VALUE (null, ?, ?)";
+            // 쿼리를 날리고 생성된 메시지의 id를 반환 받기 위해 Statement.RETURN_GENERATED_KEYS 추가
             PreparedStatement ps = c.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
             // Prepare the parameters for the SQL
             ps.setString(1, message.getText());
