@@ -1,12 +1,14 @@
-package com.rock.boottutorial;
+package com.rock.boottutorial.config;
 
+import com.rock.boottutorial.web.AuditingFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import java.util.Arrays;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Import;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
@@ -15,6 +17,7 @@ import javax.sql.DataSource;
 @Configuration
 // @ComponentScan 어노테이션이 달린 컴포넌트를 스캔할 기본 패키지를 스프링에 알려주기 위해 @Configuration과 함께 사용
 @ComponentScan("com.rock.boottutorial")
+@EnableTransactionManagement    // 트랜잭션 관리 추가
 public class AppConfig {
 
     // LocalSessionFactoryBean 를 생성하려면 javax.sql.DataSource 인스턴스가 필요하다.
@@ -47,6 +50,14 @@ public class AppConfig {
         return sessionFactoryBean;
     }
 
+    // HibernateTransactionManager Bean 생성
+    @Bean
+    public HibernateTransactionManager transactionManager() {
+        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
+        // SessionFactory 인스턴스를 transactionManager 트랜잭션관리자에 설정
+        transactionManager.setSessionFactory(sessionFactory().getObject());
+        return transactionManager;
+    }
 
     // Bean을 생성, 메소드 명이 빈의 명이 된다.
 //    @Bean

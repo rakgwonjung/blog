@@ -1,4 +1,4 @@
-package com.rock.boottutorial;
+package com.rock.boottutorial.security;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

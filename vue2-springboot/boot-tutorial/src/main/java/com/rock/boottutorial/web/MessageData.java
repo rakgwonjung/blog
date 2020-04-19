@@ -1,4 +1,4 @@
-package com.rock.boottutorial;
+package com.rock.boottutorial.web;
 
 public class MessageData {
 

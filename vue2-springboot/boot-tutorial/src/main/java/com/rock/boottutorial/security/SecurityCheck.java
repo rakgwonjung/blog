@@ -1,4 +1,4 @@
-package com.rock.boottutorial;
+package com.rock.boottutorial.security;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

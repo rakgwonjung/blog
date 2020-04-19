@@ -1,4 +1,4 @@
-package com.rock.boottutorial;
+package com.rock.boottutorial.model;
 
 import javax.persistence.*;
 import java.util.Date;

@@ -1,4 +1,4 @@
-package com.rock.boottutorial;
+package com.rock.boottutorial.web;
 
 import org.springframework.web.filter.GenericFilterBean;
 

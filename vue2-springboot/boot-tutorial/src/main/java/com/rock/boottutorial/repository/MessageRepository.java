@@ -1,26 +1,21 @@
-package com.rock.boottutorial;
+package com.rock.boottutorial.repository;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.rock.boottutorial.model.Message;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceUtils;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.hibernate.query.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import javax.sql.DataSource;
-import java.sql.*;
+import java.util.List;
 
 // 메시지 저장을 담당하는 저장소
 // @Component 은 제네릭 스테레오 타입이다 클래스에 이 어노테이션이 있으면 해당 클래스를 인스턴스화 한다
 @Component
 public class MessageRepository {
 
-    private static final Log logger = LogFactory.getLog(MessageRepository.class);
+    private static final Logger logger = LoggerFactory.getLogger(MessageRepository.class);
 
 //    private DataSource dataSource;
 
@@ -40,7 +35,11 @@ public class MessageRepository {
 
     public Message saveMessage(Message message) {
         // Session 인스턴스를 획득
-        Session session = sessionFactory.openSession();
+//        Session session = sessionFactory.openSession();
+
+        // 트랜잭션 어드바이저와 공유하는 현재의 하이버네이트 컨텍스트에 있는 현재 세션을 획득한다.
+        // 이러한 방식으로 트랜잭션 어드바이저는 에러가 발생했을 때 저장된 메시지를 롤백할 수 있다.
+        Session session = sessionFactory.getCurrentSession();
         // message 객체를 저장하는 session 객체의 save 메서드 사용
         // 하이버네이트를 사용하면 message 객체의 생성된 id를 얻는 것에 대해 걱정할 필요 없다
         // 스프링 JDBC 만을 사용할 때 처럼 GeneratedKeyHolder holder = new GeneratedKeyHolder(); XXXX
@@ -48,6 +47,15 @@ public class MessageRepository {
         // 불필요한 코드를 절약하고 비지니스 로직에만 집중할 수 있다.
         session.save(message);
         return message;
+    }
+
+    public List<Message> getMessages() {
+        // 세션을 얻는다
+        Session session = sessionFactory.getCurrentSession();
+        String hql = "from Message";
+        // HQL (Hibernate Query Language) 생성
+        Query<Message> query = session.createQuery(hql, Message.class);
+        return query.list();
     }
 
     // ***
