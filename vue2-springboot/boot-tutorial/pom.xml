@@ -80,6 +80,16 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
+		<!-- 하이버네이트와 같은 ORM 기술을 기반으로 하는 스프링의 ORM을 지원 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+		</dependency>
+		<!-- 하이버네이트 ORM 프레임워크 -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
