@@ -25,7 +25,7 @@ public class Message {
 	private String text;
 
 	// 컬럼 매핑, 널 허용하지 않음
-	@Column(name = "create_date", nullable = false)
+	@Column(name = "created_date", nullable = false)
 	// java.util.Date, java.util.Calendar 타입의 필드에 필수적으로 추가 해야 한다.
 	// @Temporal(TemporalType.TIMESTAMP) 값은 createdDate필드를 JDBC가 이해할 수 있는 java.sql.Timestamp 타입의 값과 매핑
 	@Temporal(TemporalType.TIMESTAMP)
